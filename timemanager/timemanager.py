@@ -2,6 +2,17 @@ import time
 import Tkinter
 from configure import Cfg
 import threading
+import signal
+import sys
+
+
+def signal_handler(singal, frame):
+    print ""
+    print "Ctrl+C pressed"
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
 
 
 class ProtectEye(Tkinter.Tk):
