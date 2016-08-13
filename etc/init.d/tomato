@@ -1,9 +1,4 @@
-#!/bin/bash
-
-
-set -e
-
-
+#!/bin/sh
 NAME=tomato
 PIDFILE=/var/run/$NAME.pid
 DAEMON=/bin/start_tomato.sh
