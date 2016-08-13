@@ -1,0 +1,9 @@
+#!/bin/bash
+
+case "$1" in
+        start)
+            start-stop-daemon --start --background --exec tomator
+            ;;
+        stop)
+            start-stop-daemon --stop --name tomator
+esac

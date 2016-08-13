@@ -8,7 +8,7 @@ setup(
     author_email = "winglq@gmail.com",
     packages=['timemanager'],
     entry_points = {
-        'console_scripts': ['tomator=timemanager.timemanager:main'],
+        'console_scripts': ['tomato=timemanager.timemanager:main'],
     }
 )
 
