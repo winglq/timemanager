@@ -7,5 +7,8 @@ setup(
     author = "Liu Qing",
     author_email = "winglq@gmail.com",
     packages=['timemanager'],
+    entry_points = {
+        'console_scripts': ['tomator=timemanager.timemanager:main'],
+    }
 )
 

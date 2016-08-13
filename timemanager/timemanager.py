@@ -80,8 +80,7 @@ class ProtectEye(Tkinter.Tk):
         self.button.destroy()
         self.buttondelay.destroy()
 
-
-if __name__ == "__main__":
+def main():
     cfg=Cfg()
     time.sleep(cfg.worktime)
     while True:
@@ -89,3 +88,7 @@ if __name__ == "__main__":
         app.title('ProtectEye')
         app.mainloop()
         time.sleep(cfg.worktime)
+
+
+if __name__ == "__main__":
+    main()
