@@ -5,7 +5,6 @@ import threading
 import signal
 import sys
 
-
 def signal_handler(singal, frame):
     print ""
     print "Ctrl+C pressed"
@@ -22,7 +21,11 @@ class ProtectEye(Tkinter.Tk):
         self.cfg=cfg
         self.small_break_count = 0
         self.resttime_left = 0
+        self.sw = self.winfo_screenwidth()
+        self.sh = self.winfo_screenheight()
+
         self.initialize()
+        self.restClicked = False
 
     def initialize(self):
         self.grid()
@@ -46,7 +49,7 @@ class ProtectEye(Tkinter.Tk):
         self.buttonQuit.grid(column=2,row=1)
         
         self.grid_columnconfigure(0,weight=1)
-        self.geometry("400x300")
+        self.geometry("%sx%s" % (self.sw, self.sh))
 
     def OnDestroyMain(self,event):
         self.destroy()
@@ -60,12 +63,26 @@ class ProtectEye(Tkinter.Tk):
             time.sleep(1)
         self.event_generate("<<Destroy_Main>>",when="tail")
 
+    def DestroyInBackground(self):
+        i = 0
+        while i < self.cfg.resttime and not self.restClicked:
+            time.sleep(1)
+            i += 1
+        if self.restClicked:
+            return
+        self.event_generate("<<Destroy_Main>>",when="tail")
+
     def OnButtonQuit(self):
         quit()
 
     def delaycallback(self):
+        self.restClicked = True
         time.sleep(self.cfg.delayTime)
-        self.geometry("400x300")
+        self.geometry("%sx%s" % (self.sw, self.sh))
+        self.restClicked = False
+        t = threading.Thread(target=self.DestroyInBackground)
+        t.daemon =True
+        t.start()
 
     def OnButtonDelay(self):
         t = threading.Thread(target=self.delaycallback)
@@ -74,6 +91,7 @@ class ProtectEye(Tkinter.Tk):
         self.geometry("0x0")
 
     def OnButtonClick(self):
+        self.restClicked = True
         if self.small_break_count == self.cfg.small_break_count:
             self.resttime_left = self.cfg.resttime_long
             self.small_break_count = 0
@@ -97,6 +115,9 @@ def main():
     while True:
         app = ProtectEye(None)
         app.title('ProtectEye')
+        t = threading.Thread(target=app.DestroyInBackground)
+        t.daemon =True
+        t.start()
         app.mainloop()
         time.sleep(cfg.worktime)
 
